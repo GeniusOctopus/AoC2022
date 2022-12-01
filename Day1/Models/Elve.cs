@@ -1,10 +1,10 @@
 ﻿namespace Day1.Models
 {
-    internal class Elf
+    internal class Elve
     {
-        public Elf() {}
+        public Elve() {}
 
-        public Elf(string name, List<int> carriedCalories)
+        public Elve(string name, List<int> carriedCalories)
         {
             Name = name;
             CarriedCalories = carriedCalories;

@@ -7,7 +7,7 @@ namespace Day1
     {
         static void Main(string[] args)
         {
-            var elfes = new List<Elf>();
+            var elfes = new List<Elve>();
 
             // Part 1
             try
@@ -16,7 +16,7 @@ namespace Day1
                 using StreamReader reader = new(fs, Encoding.UTF8);
 
                 var elfCounter = 0;
-                elfes.Add(new Elf($"Elf {elfCounter + 1}", new List<int>()));
+                elfes.Add(new Elve($"Elve {elfCounter + 1}", new List<int>()));
                 var line = reader.ReadLine();
 
                 while (line != null)
@@ -28,7 +28,7 @@ namespace Day1
                     else
                     {
                         elfCounter++;
-                        elfes.Add(new Elf($"Elf {elfCounter + 1}", new List<int>()));
+                        elfes.Add(new Elve($"Elve {elfCounter + 1}", new List<int>()));
                     }
 
                     line = reader.ReadLine();
@@ -37,9 +37,9 @@ namespace Day1
                 var maxCalories = elfes.Max(x => x.CarriedCalories.Sum());
                 var nameOfElf = elfes.First(x => x.CarriedCalories.Sum() == maxCalories).Name;
 
-                Console.WriteLine($"Elf count: {elfes.Count}");
+                Console.WriteLine($"Elve count: {elfes.Count}");
                 Console.WriteLine($"Max calories: {maxCalories}");
-                Console.WriteLine($"Elf with most calories: {nameOfElf}");
+                Console.WriteLine($"Elve with most calories: {nameOfElf}");
             }
             catch (Exception ex)
             {
@@ -59,11 +59,11 @@ namespace Day1
                 Console.WriteLine($"Max calories: {maxCalories}");
                 sumTopThree += maxCalories;
                 var indexOfTopElf = elfes.IndexOf(elfes.First(x => x.CarriedCalories.Sum() == maxCalories));
-                Console.WriteLine($"{i}. Elf: {elfes[indexOfTopElf].Name}");
+                Console.WriteLine($"{i}. Elve: {elfes[indexOfTopElf].Name}");
                 elfes.RemoveAt(indexOfTopElf);
             }
 
-            Console.WriteLine($"Sum of top three Elf's calories: {sumTopThree}");
+            Console.WriteLine($"Sum of top three Elve's calories: {sumTopThree}");
             Console.ReadLine();
         }
     }
