@@ -33,13 +33,6 @@ namespace Day1
 
                     line = reader.ReadLine();
                 }
-
-                var maxCalories = elfes.Max(x => x.CarriedCalories.Sum());
-                var nameOfElf = elfes.First(x => x.CarriedCalories.Sum() == maxCalories).Name;
-
-                Console.WriteLine($"Elve count: {elfes.Count}");
-                Console.WriteLine($"Max calories: {maxCalories}");
-                Console.WriteLine($"Elve with most calories: {nameOfElf}");
             }
             catch (Exception ex)
             {
@@ -47,21 +40,19 @@ namespace Day1
             }
             finally
             {
+                elfes = elfes.OrderByDescending(x => x.CarriedCalories.Sum()).ToList();
+                var maxCalories = elfes.First().CarriedCalories.Sum();
+                var nameOfElf = elfes.First().Name;
+
+                Console.WriteLine($"Elve count: {elfes.Count}");
+                Console.WriteLine($"Max calories: {maxCalories}");
+                Console.WriteLine($"Elve with most calories: {nameOfElf}");
                 Console.ReadLine();
             }
 
-            var sumTopThree = 0;
 
             // Part 2
-            for (int i = 1; i < 4; i++)
-            {
-                var maxCalories = elfes.Max(x => x.CarriedCalories.Sum());
-                Console.WriteLine($"Max calories: {maxCalories}");
-                sumTopThree += maxCalories;
-                var indexOfTopElf = elfes.IndexOf(elfes.First(x => x.CarriedCalories.Sum() == maxCalories));
-                Console.WriteLine($"{i}. Elve: {elfes[indexOfTopElf].Name}");
-                elfes.RemoveAt(indexOfTopElf);
-            }
+            var sumTopThree = elfes.Take(3).Sum(x => x.CarriedCalories.Sum());
 
             Console.WriteLine($"Sum of top three Elve's calories: {sumTopThree}");
             Console.ReadLine();
