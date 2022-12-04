@@ -51,7 +51,6 @@
                     if (rucksacks[i + 1].Contains(c) && rucksacks[i + 2].Contains(c))
                     {
                         sumBadges += ValueOf(c);
-                        Console.WriteLine(i);
                         break;
                     }
                 }
