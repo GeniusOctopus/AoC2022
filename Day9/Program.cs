@@ -4,17 +4,12 @@ namespace Day9
 {
     internal class Program
     {
+        static Point head = new(0, 0);
+        static Point tail = new(0, 0);
+        static List<Point> tailPositions = new() { tail };
+
         static void Main(string[] args)
         {
-            var head = new Point(0, 0);
-            var tail = new Point(0, 0);
-            var headPositions = new List<Point>() { head };
-            var tailPositions = new List<Point>() { head };
-            var up = 0;
-            var right = 0;
-            var down = 0;
-            var left = 0;
-
             try
             {
                 using var fs = new FileStream(Path.GetFullPath("../../../Input/Rope.txt"), FileMode.Open, FileAccess.Read);
@@ -24,77 +19,7 @@ namespace Day9
 
                 while (move is not null)
                 {
-                    var mulm = move.Split(' ');
-                    var direction = mulm[0];
-                    var steps = int.Parse(mulm[1]);
-
-                    switch (direction)
-                    {
-                        case "U":
-                            up += steps;
-                            for (int i = 0; i < steps; i++)
-                            {
-                                head = new Point(head.X, head.Y + 1);
-                                if (!headPositions.Contains(head))
-                                    headPositions.Add(head);
-
-                                if (Math.Abs(head.X - tail.X) > 1 || Math.Abs(head.Y - tail.Y) > 1)
-                                {
-                                    tail = new Point(head.X, head.Y - 1);
-                                    if (!tailPositions.Contains(tail))
-                                        tailPositions.Add(tail);
-                                }
-                            }
-                            break;
-                        case "R":
-                            right += steps;
-                            for (int i = 0; i < steps; i++)
-                            {
-                                head = new Point(head.X + 1, head.Y);
-                                if (!headPositions.Contains(head))
-                                    headPositions.Add(head);
-
-                                if (Math.Abs(head.X - tail.X) > 1 || Math.Abs(head.Y - tail.Y) > 1)
-                                {
-                                    tail = new Point(head.X - 1, head.Y);
-                                    if (!tailPositions.Contains(tail))
-                                        tailPositions.Add(tail);
-                                }
-                            }
-                            break;
-                        case "D":
-                            down += steps;
-                            for (int i = 0; i < steps; i++)
-                            {
-                                head = new Point(head.X, head.Y - 1);
-                                if (!headPositions.Contains(head))
-                                    headPositions.Add(head);
-
-                                if (Math.Abs(head.X - tail.X) > 1 || Math.Abs(head.Y - tail.Y) > 1)
-                                {
-                                    tail = new Point(head.X, head.Y + 1);
-                                    if (!tailPositions.Contains(tail))
-                                        tailPositions.Add(tail);
-                                }
-                            }
-                            break;
-                        case "L":
-                            left += steps;
-                            for (int i = 0; i < steps; i++)
-                            {
-                                head = new Point(head.X - 1, head.Y);
-                                if (!headPositions.Contains(head))
-                                    headPositions.Add(head);
-
-                                if (Math.Abs(head.X - tail.X) > 1 || Math.Abs(head.Y - tail.Y) > 1)
-                                {
-                                    tail = new Point(head.X + 1, head.Y);
-                                    if (!tailPositions.Contains(tail))
-                                        tailPositions.Add(tail);
-                                }
-                            }
-                            break;
-                    }
+                    MoveDirection(move.First(), int.Parse(move[2..]));
 
                     move = sr.ReadLine();
                 }
@@ -105,13 +30,59 @@ namespace Day9
             }
             finally
             {
-                Console.WriteLine($"up: {up}");
-                Console.WriteLine($"right: {right}");
-                Console.WriteLine($"down: {down}");
-                Console.WriteLine($"left: {left}");
-                Console.WriteLine($"psoitions: {headPositions.Count}");
-                Console.WriteLine($"psoitions: {tailPositions.Count}");
+                Console.WriteLine($"positions: {tailPositions.Count}");
             }
+        }
+
+        static void MoveDirection(char direction, int steps)
+        {
+            switch (direction)
+            {
+                case 'U': MoveHead(direction, steps); break;
+                case 'L': MoveHead(direction, steps); break;
+                case 'D': MoveHead(direction, steps); break;
+                case 'R': MoveHead(direction, steps); break;
+                default: break;
+            }
+        }
+
+        static void MoveHead(char direction, int steps)
+        {
+            for (int i = 0; i < steps; i++)
+            {
+                switch (direction)
+                {
+                    case 'U': head = new Point(head.X, head.Y + 1); break;
+                    case 'L': head = new Point(head.X - 1, head.Y); break;
+                    case 'D': head = new Point(head.X, head.Y - 1); break;
+                    case 'R': head = new Point(head.X + 1, head.Y); break;
+                    default: break;
+                }
+
+                if (Delta())
+                {
+                    tail = GetPoint(direction);
+                    if (!tailPositions.Contains(tail))
+                        tailPositions.Add(tail);
+                }
+            }
+        }
+
+        static bool Delta()
+        {
+            return (Math.Abs(head.X - tail.X) > 1 || Math.Abs(head.Y - tail.Y) > 1);
+        }
+
+        static Point GetPoint(char direcion)
+        {
+            return direcion switch
+            {
+                'U' => new Point(head.X, head.Y - 1),
+                'L' => new Point(head.X + 1, head.Y),
+                'D' => new Point(head.X, head.Y + 1),
+                'R' => new Point(head.X - 1, head.Y),
+                _ => new Point(head.X, head.Y),
+            };
         }
     }
 }
