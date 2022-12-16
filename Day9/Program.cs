@@ -26,11 +26,11 @@ namespace Day9
 
                 while (move is not null)
                 {
-                    var result1 = Move2(move.First(), int.Parse(move[2..]), head1, tail1, tailPositions1);
+                    var result1 = MoveInDirection(move.First(), int.Parse(move[2..]), head1, tail1, tailPositions1);
                     head1 = result1.Item1;
                     tail1 = result1.Item2;
                     tailPositions1 = result1.Item3;
-                    var result2 = Move2(move.First(), int.Parse(move[2..]), head2, tail2, tailPositions2);
+                    var result2 = MoveInDirection(move.First(), int.Parse(move[2..]), head2, tail2, tailPositions2);
                     head2 = result2.Item1;
                     tail2 = result2.Item2;
                     tailPositions2 = result2.Item3;
@@ -49,7 +49,7 @@ namespace Day9
             }
         }
 
-        static (Point, List<Point>, List<Point>) Move2(char direction, int steps, Point head, List<Point> tail, List<Point> tailPositions)
+        static (Point, List<Point>, List<Point>) MoveInDirection(char direction, int steps, Point head, List<Point> tail, List<Point> tailPositions)
         {
             for (int i = 0; i < steps; i++)
             {
@@ -66,9 +66,9 @@ namespace Day9
 
                 for (int j = 0; j < tail.Count; j++)
                 {
-                    if (Delta2(headAux, tail[j]))
+                    if (IsHighDelta(headAux, tail[j]))
                     {
-                        tail[j] = GetPoint2(headAux, tail[j]);
+                        tail[j] = GetNewTailPosition(headAux, tail[j]);
                         if (!tailPositions.Contains(tail[^1]) && j == tail.Count - 1)
                             tailPositions.Add(tail[^1]);
                     }
@@ -79,12 +79,12 @@ namespace Day9
             return (head, tail, tailPositions);
         }
 
-        static bool Delta2(Point head, Point tail)
+        static bool IsHighDelta(Point head, Point tail)
         {
             return (Math.Abs(head.X - tail.X) > 1 || Math.Abs(head.Y - tail.Y) > 1);
         }
 
-        static Point GetPoint2(Point head, Point tail)
+        static Point GetNewTailPosition(Point head, Point tail)
         {
             // rechts
             if (head.X - tail.X >= 1 && head.Y - tail.Y == 0)
