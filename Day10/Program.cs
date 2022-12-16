@@ -1,11 +1,12 @@
-﻿namespace Day10
+﻿using Microsoft.Win32;
+
+namespace Day10
 {
     internal class Program
     {
         static void Main(string[] args)
         {
             var cycles = 0;
-            var signalStrenth = 0;
             var registerX = 1;
             var measuredSignalStrength = new Dictionary<int, int>();
 
@@ -24,60 +25,18 @@
                     {
                         case "noop":
                             cycles++;
-                            switch (cycles)
-                            {
-                                case 20:
-                                    measuredSignalStrength.Add(20, registerX * cycles);
-                                    break;
-                                case 60:
-                                    measuredSignalStrength.Add(60, registerX * cycles);
-                                    break;
-                                case 100:
-                                    measuredSignalStrength.Add(100, registerX * cycles);
-                                    break;
-                                case 140:
-                                    measuredSignalStrength.Add(140, registerX * cycles);
-                                    break;
-                                case 180:
-                                    measuredSignalStrength.Add(180, registerX * cycles);
-                                    break;
-                                case 220:
-                                    measuredSignalStrength.Add(220, registerX * cycles);
-                                    break;
-                            }
+                            measuredSignalStrength = SetSignalStrengths(cycles, registerX, measuredSignalStrength);
                             break;
                         case "addx":
                             for (int i = 0; i < 2; i++)
                             {
                                 cycles++;
-                                switch (cycles)
-                                {
-                                    case 20:
-                                        measuredSignalStrength.Add(20, registerX * cycles);
-                                        break;
-                                    case 60:
-                                        measuredSignalStrength.Add(60, registerX * cycles);
-                                        break;
-                                    case 100:
-                                        measuredSignalStrength.Add(100, registerX * cycles);
-                                        break;
-                                    case 140:
-                                        measuredSignalStrength.Add(140, registerX * cycles);
-                                        break;
-                                    case 180:
-                                        measuredSignalStrength.Add(180, registerX * cycles);
-                                        break;
-                                    case 220:
-                                        measuredSignalStrength.Add(220, registerX * cycles);
-                                        break;
-                                }
+                                measuredSignalStrength = SetSignalStrengths(cycles, registerX, measuredSignalStrength);
                                 if (i == 1)
                                     registerX += int.Parse(instructions[1]);
                             }
                             break;
                     }
-                    //Console.WriteLine($"{instructions[0]} {(instructions.Length > 1 ? instructions[1] : string.Empty)}; X: {registerX} signal strength: {registerX * cycles}; end of cycle: {cycles}");
-                    //Console.ReadLine();
 
                     instruction = sr.ReadLine();
                 }
@@ -88,14 +47,36 @@
             }
             finally
             {
-                foreach (var signal in measuredSignalStrength)
-                {
-                    Console.WriteLine($"cycle: {signal.Key}, signal strength: {signal.Value}");
-                }
                 Console.WriteLine($"Sum: {measuredSignalStrength.Sum(x => x.Value)}");
-                Console.WriteLine($"cycles: {cycles}");
                 Console.ReadLine();
             }
+        }
+
+        private static Dictionary<int, int> SetSignalStrengths(int cycle, int x, Dictionary<int, int> signals)
+        {
+            switch (cycle)
+            {
+                case 20:
+                    signals.Add(20, x * cycle);
+                    break;
+                case 60:
+                    signals.Add(60, x * cycle);
+                    break;
+                case 100:
+                    signals.Add(100, x * cycle);
+                    break;
+                case 140:
+                    signals.Add(140, x * cycle);
+                    break;
+                case 180:
+                    signals.Add(180, x * cycle);
+                    break;
+                case 220:
+                    signals.Add(220, x * cycle);
+                    break;
+            }
+
+            return signals;
         }
     }
 }
